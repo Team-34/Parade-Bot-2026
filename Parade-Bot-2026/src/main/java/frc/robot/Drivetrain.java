@@ -8,7 +8,9 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
 
 public class Drivetrain extends SubsystemBase {
   // Initialize 4 TalonFX motors with their Phoenix Tuner X CAN IDs
@@ -42,11 +44,7 @@ public class Drivetrain extends SubsystemBase {
     drive = new DifferentialDrive(leftLeader::set, rightLeader::set);
   }
 
-  public void tankDrive(double leftSpeed, double rightSpeed) {
-    drive.tankDrive(leftSpeed, rightSpeed);
-  }
-
-  public void stop() {
-    drive.stopMotor();
+  public Command tankDrive(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
+    return run(() -> drive.tankDrive(leftSpeed.getAsDouble(), rightSpeed.getAsDouble()));
   }
 }
